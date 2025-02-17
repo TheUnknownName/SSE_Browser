@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Server-Sent Events Demo</h1>
+<div id="sse-updates"></div>
+
+<script>
+    $(document).ready(function () {
+        const eventSource = new EventSource('http://localhost:3000/sse');
+
+        // Event spesifik dari server
+        eventSource.addEventListener('time-update', (event) => {
+            console.log('SSE event:', event.data);
+            $('#sse-updates').innerHTML = `<p>${event.data}</p>`;
+        });
+
+        // Jika koneksi dibuka
+          eventSource.onopen = function () {
+            console.log('SSE connection opened');
+        };
+
+        // Jika terjadi error
+        eventSource.onerror = function (error) {
+            console.error('SSE error:', error);
+            eventSource.close();
+        };
+    });
+</script>
+</body>
+</html>
